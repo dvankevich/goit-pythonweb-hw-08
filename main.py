@@ -1,10 +1,13 @@
 import uvicorn
-from fastapi import FastAPI, Depends, HTTPException, status
+from fastapi import FastAPI, Depends, HTTPException, status 
 from sqlalchemy.orm import Session
 from sqlalchemy import text
 from src.db.session import get_db
+from src.api.contact_api import router as contact_router
 
 app = FastAPI(title="Contacts API")
+
+app.include_router(contact_router)
 
 
 @app.get("/healthcheck")
