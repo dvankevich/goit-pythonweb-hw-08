@@ -1,4 +1,5 @@
-from fastapi import APIRouter, Depends, HTTPException, status
+from typing import List, Optional
+from fastapi import APIRouter, Depends, HTTPException, status, Query
 from sqlalchemy.orm import Session
 from src.db.session import get_db
 from src.schemas.contact import ContactCreate, ContactResponse, ContactUpdate
@@ -12,9 +13,18 @@ def create_contact(contact: ContactCreate, db: Session = Depends(get_db)):
     return contact_repository.create(db, contact)
 
 
-@router.get("/", response_model=list[ContactResponse])
-def read_contacts(db: Session = Depends(get_db)):
-    return contact_repository.get_all(db)
+@router.get("/", response_model=List[ContactResponse])
+def read_contacts(
+    first_name: Optional[str] = Query(None, description="find by first name"),
+    last_name: Optional[str] = Query(None, description="find by second name"),
+    email: Optional[str] = Query(None, description="find by email"),
+    db: Session = Depends(get_db),
+):
+
+    contacts = contact_repository.get_all(
+        db, first_name=first_name, last_name=last_name, email=email
+    )
+    return contacts
 
 
 @router.get("/{contact_id}", response_model=ContactResponse)

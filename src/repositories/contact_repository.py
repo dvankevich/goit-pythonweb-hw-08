@@ -1,12 +1,28 @@
 from typing import Optional
-from sqlalchemy import select
+from sqlalchemy import select, or_
 from sqlalchemy.orm import Session
 from src.models.contact import Contact
 from src.schemas.contact import ContactCreate, ContactUpdate
 
 
-def get_all(db: Session):
-    return db.scalars(select(Contact)).all()
+def get_all(
+    db: Session,
+    first_name: str | None = None,
+    last_name: str | None = None,
+    email: str | None = None,
+):
+    stmt = select(Contact)
+
+    if first_name:
+        stmt = stmt.where(Contact.first_name.ilike(f"%{first_name}%"))
+
+    if last_name:
+        stmt = stmt.where(Contact.last_name.ilike(f"%{last_name}%"))
+
+    if email:
+        stmt = stmt.where(Contact.email.ilike(f"%{email}%"))
+
+    return db.scalars(stmt).all()
 
 
 def get_by_id(db: Session, contact_id: int):
