@@ -20,6 +20,10 @@ def create(db: Session, contact_data: ContactCreate):
     return db_contact
 
 
-def delete(db: Session, contact: Contact):
-    db.delete(contact)
-    db.commit()
+def delete(db: Session, contact_id: int) -> bool:
+    contact = get_by_id(db, contact_id)
+    if contact:
+        db.delete(contact)
+        db.commit()
+        return True
+    return False

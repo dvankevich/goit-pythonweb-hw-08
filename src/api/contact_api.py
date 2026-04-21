@@ -23,3 +23,16 @@ def read_contact(contact_id: int, db: Session = Depends(get_db)):
     if not contact:
         raise HTTPException(status_code=404, detail="Contact not found")
     return contact
+
+
+@router.delete("/{contact_id}", status_code=status.HTTP_204_NO_CONTENT)
+def delete_contact(contact_id: int, db: Session = Depends(get_db)):
+    success = contact_repository.delete(db, contact_id)
+
+    if not success:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=f"Contact with id {contact_id} not found",
+        )
+
+    return None
