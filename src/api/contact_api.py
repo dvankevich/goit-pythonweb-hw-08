@@ -18,11 +18,18 @@ def read_contacts(
     first_name: Optional[str] = Query(None, description="find by first name"),
     last_name: Optional[str] = Query(None, description="find by second name"),
     email: Optional[str] = Query(None, description="find by email"),
+    upcoming_birthdays: bool = Query(
+        False, description="Show only contacts with birthdays in the next 7 days"
+    ),
     db: Session = Depends(get_db),
 ):
 
     contacts = contact_repository.get_all(
-        db, first_name=first_name, last_name=last_name, email=email
+        db,
+        first_name=first_name,
+        last_name=last_name,
+        email=email,
+        upcoming_birthdays=upcoming_birthdays,
     )
     return contacts
 
