@@ -19,7 +19,9 @@ POSTGRES_PORT=<port. default 5432>
 ```
 #### create database via CLI
 ```bash
-psql -U postgres
+psql -U postgres # if postgesql in your host
+
+docker exec -it <container_name> psql -U postgres # if posgresql in docker container
 ```
 
 ```sql
@@ -35,6 +37,10 @@ poetry install
 ```bash
 poetry env use 3.13
 eval $(poetry env activate)
+```
+#### run database migrations
+```bash
+alembic upgrade head
 ```
 
 #### run in dev-mode
