@@ -41,6 +41,11 @@ def get_by_id(db: Session, contact_id: int):
     return db.get(Contact, contact_id)
 
 
+def get_by_email(db: Session, email: str):
+    stmt = select(Contact).where(Contact.email == email)
+    return db.execute(stmt).scalar_one_or_none()
+
+
 def create(db: Session, contact_data: ContactCreate):
     db_contact = Contact(**contact_data.model_dump())
     db.add(db_contact)

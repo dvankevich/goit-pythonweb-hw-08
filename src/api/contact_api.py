@@ -10,6 +10,14 @@ router = APIRouter(prefix="/contacts", tags=["contacts"])
 
 @router.post("/", response_model=ContactResponse, status_code=status.HTTP_201_CREATED)
 def create_contact(contact: ContactCreate, db: Session = Depends(get_db)):
+    existing_contact = contact_repository.get_by_email(db, email=contact.email)
+
+    if existing_contact:
+        raise HTTPException(
+            status_code=status.HTTP_409_CONFLICT,
+            detail=f"Contact with email '{contact.email}' already exists.",
+        )
+
     return contact_repository.create(db, contact)
 
 
