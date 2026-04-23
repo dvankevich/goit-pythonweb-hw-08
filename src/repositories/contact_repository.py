@@ -28,7 +28,7 @@ def get_all(
         today = date.today()
         # Generate a list of "MM-DD" strings for the next 7 days
         upcoming_dates = [
-            (today + timedelta(days=i)).strftime("%m-%d") for i in range(8)
+            (today + timedelta(days=i)).strftime("%m-%d") for i in range(7)
         ]
 
         # ignore year
